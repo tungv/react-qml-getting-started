@@ -1,0 +1,18 @@
+{
+  "name": "react-qml-getting-started",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@react-qml/cli": "^0.1.4",
+    "react": "^16.8.5",
+    "react-qml": "^0.4.3"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production DEV_SERVER_HOST=localhost rq start --platform=macos",
+    "build": "NODE_ENV=production rq bundle --platform=macos"
+  },
+  "devDependencies": {
+    "react-devtools": "^3.6.1"
+  }
+}
