@@ -1,9 +1,11 @@
-import { Button } from 'react-qml/QtQuickControls2';
-import { Window, Text, ColumnLayout } from 'react-qml';
+import { Window, ColumnLayout } from 'react-qml';
 import * as React from 'react';
+import _ from 'lodash';
 
-import ControlledCheckBox from './components/ControlledCheckBox';
-import ControlledTextField from './components/ControlledTextField';
+import ErrorBoundary from './ErrorBoundary';
+import NewTodo from './NewTodo';
+import StateContext from './StateContext';
+import TodoList from './TodoList';
 import useWindowState from './useWindowState';
 
 export default function App(props) {
@@ -17,6 +19,24 @@ export default function App(props) {
     requestOpen,
   } = useWindowState();
 
+  const [state, dispatch] = React.useReducer(todosReducer, {
+    todos: {
+      '1': { id: '1', text: 'React QML', checked: false },
+      '2': { id: '2', text: 'QtQuick Control', checked: true },
+      '3': { id: '3', text: 'test', checked: false },
+      '4': { id: '4', text: 'test', checked: false },
+    },
+  });
+
+  const { todos } = state;
+
+  const todosArray = React.useMemo(
+    () => {
+      return _.toArray(todos);
+    },
+    [todos]
+  );
+
   return (
     <Window
       title="Todo List - ReactQML"
@@ -28,44 +48,38 @@ export default function App(props) {
       onVisibilityChanged={setVisibility}
       onClosing={requestClosing}
     >
-      <ColumnLayout anchors={{ left: 'parent.left', right: 'parent.right' }}>
-        <Text text={value} />
-        <ControlledTextField
-          Layout={{ fillWidth: true }}
-          text={value}
-          onTextChanged={text => {
-            setValue(text);
-          }}
-        />
-        <ControlledTextField
-          Layout={{ fillWidth: true }}
-          text={value}
-          onTextChanged={e => {
-            console.log('requesting change', e);
-          }}
-        />
-        <Text text={checkState} />
-        <ControlledCheckBox
-          checkState={checkState}
-          onCheckStateChanged={nextCheckState => setCheckState(nextCheckState)}
-        />
-        <ControlledCheckBox
-          checkState={checkState}
-          onCheckStateChanged={e => {
-            console.log('requesting change', e);
-          }}
-        />
-        <Button
-          text="close"
-          onClicked={() => {
-            requestClosing();
-
-            setTimeout(() => {
-              requestOpen();
-            }, 1000);
-          }}
-        />
-      </ColumnLayout>
+      <ErrorBoundary>
+        <StateContext.Provider value={dispatch}>
+          <ColumnLayout
+            anchors={{ left: 'parent.left', right: 'parent.right' }}
+          >
+            <TodoList todos={todosArray} />
+            <NewTodo />
+          </ColumnLayout>
+        </StateContext.Provider>
+      </ErrorBoundary>
     </Window>
   );
+}
+
+function todosReducer(state, action) {
+  console.log(require('util').inspect(action.payload, { depth: null }));
+  if (action.type === 'checkStateChanged') {
+    const { id, nextChecked } = action.payload;
+    return {
+      todos: _.assign({}, state.todos, {
+        [id]: _.assign({}, state.todos[id], {
+          checked: nextChecked,
+        }),
+      }),
+    };
+  }
+
+  if (action.type === 'created') {
+    const { id, text } = action.payload;
+    return {
+      todos: _.assign({}, state.todos, { [id]: { id, text, checked: false } }),
+    };
+  }
+  return state;
 }

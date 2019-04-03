@@ -28,7 +28,11 @@ export default function useWindowState(
           state === Qt.ApplicationActive &&
           visibility === QWindow_Visibility.Hidden
         ) {
-          setVisibility(visibilityBeforeClosing);
+          const nextVisible =
+            visibilityBeforeClosing === QWindow_Visibility.Hidden
+              ? initialState
+              : visibilityBeforeClosing;
+          setVisibility(nextVisible);
         }
       }
       Qt.application.stateChanged.connect(stateChangedHandler);
