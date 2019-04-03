@@ -1,2 +1,4 @@
 node_modules
 native
+build
+.DS_Store

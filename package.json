@@ -4,13 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@react-qml/cli": "^0.1.4",
+    "@react-qml/cli": "^0.1.6",
     "react": "^16.8.5",
-    "react-qml": "^0.4.3"
+    "react-qml": "^0.4.5"
   },
   "scripts": {
-    "start": "NODE_ENV=production DEV_SERVER_HOST=localhost rq start --platform=macos",
-    "build": "NODE_ENV=production rq bundle --platform=macos"
+    "start": "DEV_SERVER_HOST=localhost rq start --platform=osx",
+    "build": "NODE_ENV=production rq bundle --platform=osx",
+    "dev": "sh build-dev.sh && yarn start"
   },
   "devDependencies": {
     "react-devtools": "^3.6.1"

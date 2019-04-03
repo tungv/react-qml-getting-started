@@ -1,33 +1,33 @@
-import { TextField, CheckBox } from 'react-qml/QtQuickControls2';
+import { Button } from 'react-qml/QtQuickControls2';
 import { Window, Text, ColumnLayout } from 'react-qml';
 import * as React from 'react';
 
-import useControlled from './useControlled';
-
-function ControlledTextField(props) {
-  return useControlled(
-    TextField,
-    props,
-    'text',
-    (applyChange, prevText, currentText, elem) => {
-      const position = elem.cursorPosition;
-      const delta = prevText.length - currentText.length;
-      applyChange();
-      elem.cursorPosition = position - delta;
-    }
-  );
-}
-
-function ControlledCheckBox(props) {
-  return useControlled(CheckBox, props, 'checkState');
-}
+import ControlledCheckBox from './components/ControlledCheckBox';
+import ControlledTextField from './components/ControlledTextField';
+import useWindowState from './useWindowState';
 
 export default function App(props) {
   const [value, setValue] = React.useState('');
   const [checkState, setCheckState] = React.useState(2);
 
+  const {
+    visibility,
+    setVisibility,
+    requestClosing,
+    requestOpen,
+  } = useWindowState();
+
   return (
-    <Window title="Hello Ben" visible width={500} height={1200} x={0} y={0}>
+    <Window
+      title="Todo List - ReactQML"
+      visibility={visibility}
+      width={500}
+      height={1200}
+      x={0}
+      y={0}
+      onVisibilityChanged={setVisibility}
+      onClosing={requestClosing}
+    >
       <ColumnLayout anchors={{ left: 'parent.left', right: 'parent.right' }}>
         <Text text={value} />
         <ControlledTextField
@@ -53,6 +53,16 @@ export default function App(props) {
           checkState={checkState}
           onCheckStateChanged={e => {
             console.log('requesting change', e);
+          }}
+        />
+        <Button
+          text="close"
+          onClicked={() => {
+            requestClosing();
+
+            setTimeout(() => {
+              requestOpen();
+            }, 1000);
           }}
         />
       </ColumnLayout>
