@@ -37,5 +37,11 @@ export default function todosReducers(state, action) {
     };
   }
 
+  if (action.type === 'allCleared') {
+    return {
+      todos: {},
+    };
+  }
+
   return state;
 }

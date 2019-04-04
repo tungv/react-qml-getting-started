@@ -1,5 +1,5 @@
+import { ColumnLayout, RowLayout, Window } from 'react-qml';
 import { ScrollView, Button } from 'react-qml/QtQuickControls2';
-import { Window, ColumnLayout } from 'react-qml';
 import * as React from 'react';
 import _ from 'lodash';
 
@@ -42,6 +42,9 @@ export default function App(props) {
   const clearDone = React.useCallback(() => {
     dispatch({ type: 'doneCleared' });
   }, []);
+  const clearAll = React.useCallback(() => {
+    dispatch({ type: 'allCleared' });
+  }, []);
 
   return (
     <Window
@@ -57,11 +60,14 @@ export default function App(props) {
       <StateContext.Provider value={dispatch}>
         <ErrorBoundary>
           <ColumnLayout anchors={{ fill: 'parent' }}>
-            <Button text="clear done" onClicked={clearDone} />
             <ScrollView Layout={{ fillWidth: true, fillHeight: true }}>
               <TodoList todos={todosArray} />
             </ScrollView>
             <NewTodo />
+            <RowLayout>
+              <Button text="clear done" onClicked={clearDone} />
+              <Button text="clear all" onClicked={clearAll} />
+            </RowLayout>
           </ColumnLayout>
         </ErrorBoundary>
       </StateContext.Provider>
