@@ -44,19 +44,21 @@ export default function TodoItem(props) {
         onCheckStateChanged={onChecked}
         enabled={!isEditting}
       />
-      <ControlledTextField
-        visible={isEditting}
-        text={edittingText}
-        Layout={{ fillWidth: true }}
-        onTextChanged={setEdittingText}
-        onAccepted={updateText}
-      />
-      <Text
-        visible={!isEditting}
-        text={props.text}
-        font={{ strikeout: props.checked }}
-        Layout={{ fillWidth: true }}
-      />
+      {isEditting && (
+        <ControlledTextField
+          text={edittingText}
+          Layout={{ fillWidth: true }}
+          onTextChanged={setEdittingText}
+          onAccepted={updateText}
+        />
+      )}
+      {!isEditting && (
+        <Text
+          text={props.text}
+          font={{ strikeout: props.checked }}
+          Layout={{ fillWidth: true }}
+        />
+      )}
       <Button
         text={isEditting ? 'Cancel' : 'Edit'}
         onClicked={toggleEditting}

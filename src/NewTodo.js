@@ -34,11 +34,13 @@ export default function NewTodo() {
   );
 
   return (
-    <RowLayout>
+    <RowLayout Layout={{ fillWidth: true, margins: 4 }}>
       <ControlledTextField
         text={text}
         onTextChanged={setText}
         onAccepted={submit}
+        Layout={{ fillWidth: true }}
+        placeholderText="Add new todo"
       />
       <Button style={{ highlighted: true }} text="create" onClicked={submit} />
     </RowLayout>
