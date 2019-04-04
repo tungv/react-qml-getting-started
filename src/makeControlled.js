@@ -47,7 +47,7 @@ export default function makeControlled(
           } else {
             ref.current[ctrlPropName] = current;
           }
-          ctrlOnChange(prev);
+          if (typeof ctrlOnChange === 'function') ctrlOnChange(prev);
         }
       };
 

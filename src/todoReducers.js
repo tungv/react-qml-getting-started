@@ -22,5 +22,14 @@ export default function todosReducers(state, action) {
     };
   }
 
+  if (action.type === 'textEdited') {
+    const { id, text } = action.payload;
+    return {
+      todos: _.assign({}, state.todos, {
+        [id]: { id, text, checked: state.todos[id].checked },
+      }),
+    };
+  }
+
   return state;
 }
