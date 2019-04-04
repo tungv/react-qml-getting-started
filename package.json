@@ -13,7 +13,8 @@
   },
   "scripts": {
     "start": "DEV_SERVER_HOST=localhost rq start --platform=osx",
-    "build": "NODE_ENV=production rq bundle --platform=osx",
+    "prebuild": "rm -rf build",
+    "build": "sh build-prod.sh",
     "dev": "sh build-dev.sh && yarn start"
   },
   "devDependencies": {
