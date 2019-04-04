@@ -21,14 +21,16 @@ export default function NewTodo() {
   const submit = React.useCallback(
     () => {
       // console.log('dispatching', textRef.current);
-      dispatch({
-        type: 'created',
-        payload: {
-          text: textRef.current,
-          id: String(Math.random()),
-        },
-      });
-      setText('');
+      if (textRef.current) {
+        dispatch({
+          type: 'created',
+          payload: {
+            text: textRef.current,
+            id: String(Math.random()),
+          },
+        });
+        setText('');
+      }
     },
     [textRef]
   );
