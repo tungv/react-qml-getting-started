@@ -60,7 +60,7 @@ export default function App(props) {
       <StateContext.Provider value={dispatch}>
         <ErrorBoundary>
           <ColumnLayout anchors={{ fill: 'parent' }}>
-            <ScrollView Layout={{ fillWidth: true, fillHeight: true }}>
+            <ScrollView Layout={{ fillWidth: true, fillHeight: true }} clip>
               <TodoList todos={todosArray} />
             </ScrollView>
             <NewTodo />
