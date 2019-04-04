@@ -1,3 +1,4 @@
+import { ScrollView, Button } from 'react-qml/QtQuickControls2';
 import { Window, ColumnLayout } from 'react-qml';
 import * as React from 'react';
 import _ from 'lodash';
@@ -38,6 +39,10 @@ export default function App(props) {
     [todos]
   );
 
+  const clearDone = React.useCallback(() => {
+    dispatch({ type: 'doneCleared' });
+  }, []);
+
   return (
     <Window
       title="Todo List - ReactQML"
@@ -51,10 +56,11 @@ export default function App(props) {
     >
       <StateContext.Provider value={dispatch}>
         <ErrorBoundary>
-          <ColumnLayout
-            anchors={{ left: 'parent.left', right: 'parent.right' }}
-          >
-            <TodoList todos={todosArray} />
+          <ColumnLayout anchors={{ fill: 'parent' }}>
+            <Button text="clear done" onClicked={clearDone} />
+            <ScrollView Layout={{ fillWidth: true, fillHeight: true }}>
+              <TodoList todos={todosArray} />
+            </ScrollView>
             <NewTodo />
           </ColumnLayout>
         </ErrorBoundary>

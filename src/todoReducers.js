@@ -31,5 +31,11 @@ export default function todosReducers(state, action) {
     };
   }
 
+  if (action.type === 'doneCleared') {
+    return {
+      todos: _.pickBy(state.todos, todo => !todo.checked),
+    };
+  }
+
   return state;
 }
