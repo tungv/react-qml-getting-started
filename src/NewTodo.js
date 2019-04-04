@@ -13,7 +13,6 @@ export default function NewTodo() {
 
   React.useLayoutEffect(
     () => {
-      console.log('text changed', text);
       textRef.current = text;
     },
     [text]
@@ -41,7 +40,7 @@ export default function NewTodo() {
         onTextChanged={setText}
         onAccepted={submit}
       />
-      <Button text="create" onClicked={submit} />
+      <Button style={{ highlighted: true }} text="create" onClicked={submit} />
     </RowLayout>
   );
 }

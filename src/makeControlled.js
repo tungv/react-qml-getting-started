@@ -1,5 +1,7 @@
 import React from 'react';
 
+import _ from 'lodash';
+
 export default function makeControlled(
   Component,
   ctrlPropName,
@@ -63,8 +65,12 @@ export default function makeControlled(
     return <Component ref={ref} {...others} />;
   }
 
-  WrappedComponent.displayName =
-    'Controlled' + (Component.displayName || 'Component');
+  const name =
+    typeof Component === 'string'
+      ? _.last(Component.split('.'))
+      : Component.displayName || Component.name || 'Component';
+
+  WrappedComponent.displayName = 'Controlled' + name;
 
   return WrappedComponent;
 }

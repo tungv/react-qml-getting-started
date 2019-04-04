@@ -6,7 +6,11 @@ import ErrorBoundary from './ErrorBoundary';
 import NewTodo from './NewTodo';
 import StateContext from './StateContext';
 import TodoList from './TodoList';
+import todoReducers from './todoReducers';
+import useReducerWithAsyncStorage from './useReducerWithAsyncStorage';
 import useWindowState from './useWindowState';
+
+const INITIAL = { todos: [] };
 
 export default function App(props) {
   const [value, setValue] = React.useState('');
@@ -19,14 +23,11 @@ export default function App(props) {
     requestOpen,
   } = useWindowState();
 
-  const [state, dispatch] = React.useReducer(todosReducer, {
-    todos: {
-      '1': { id: '1', text: 'React QML', checked: false },
-      '2': { id: '2', text: 'QtQuick Control', checked: true },
-      '3': { id: '3', text: 'test', checked: false },
-      '4': { id: '4', text: 'test', checked: false },
-    },
-  });
+  const [state, dispatch] = useReducerWithAsyncStorage(
+    'todosState',
+    todoReducers,
+    INITIAL
+  );
 
   const { todos } = state;
 
@@ -42,44 +43,22 @@ export default function App(props) {
       title="Todo List - ReactQML"
       visibility={visibility}
       width={500}
-      height={1200}
+      height={800}
       x={0}
       y={0}
       onVisibilityChanged={setVisibility}
       onClosing={requestClosing}
     >
-      <ErrorBoundary>
-        <StateContext.Provider value={dispatch}>
+      <StateContext.Provider value={dispatch}>
+        <ErrorBoundary>
           <ColumnLayout
             anchors={{ left: 'parent.left', right: 'parent.right' }}
           >
             <TodoList todos={todosArray} />
             <NewTodo />
           </ColumnLayout>
-        </StateContext.Provider>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </StateContext.Provider>
     </Window>
   );
-}
-
-function todosReducer(state, action) {
-  console.log(require('util').inspect(action.payload, { depth: null }));
-  if (action.type === 'checkStateChanged') {
-    const { id, nextChecked } = action.payload;
-    return {
-      todos: _.assign({}, state.todos, {
-        [id]: _.assign({}, state.todos[id], {
-          checked: nextChecked,
-        }),
-      }),
-    };
-  }
-
-  if (action.type === 'created') {
-    const { id, text } = action.payload;
-    return {
-      todos: _.assign({}, state.todos, { [id]: { id, text, checked: false } }),
-    };
-  }
-  return state;
 }
