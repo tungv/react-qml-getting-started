@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@react-qml/cli": "^0.1.6",
-    "immer": "^2.1.4",
+    "immer": "^8.0.1",
     "lodash": "^4.17.11",
     "nanoid": "^2.0.1",
     "react": "^16.8.5",
