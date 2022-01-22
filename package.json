@@ -7,7 +7,7 @@
     "@react-qml/cli": "^0.1.6",
     "immer": "^2.1.4",
     "lodash": "^4.17.11",
-    "nanoid": "^2.0.1",
+    "nanoid": "^3.1.31",
     "react": "^16.8.5",
     "react-qml": "^0.4.5"
   },
